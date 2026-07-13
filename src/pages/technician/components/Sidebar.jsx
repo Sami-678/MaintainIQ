@@ -1,72 +1,96 @@
-import {
-  LayoutDashboard,
-  QrCode,
-  FilePlus2,
-  ClipboardCheck,
-  Wrench,
-  RefreshCcw,
-  Wifi,
-} from "lucide-react";
-import { technician } from "../data/mockData.js";
+import { NavLink, Link } from "react-router-dom";
+import { LayoutDashboard, ClipboardList, History, User, Settings, LogOut, Wrench, ArrowLeft } from "lucide-react";
+import { technician } from "../data/tasks";
 
-export const NAV_ITEMS = [
-  { key: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { key: "scan", label: "Scan QR", icon: QrCode },
-  { key: "report", label: "Report Issue", icon: FilePlus2 },
-  { key: "inspection", label: "Inspection", icon: ClipboardCheck },
-  { key: "maintenance", label: "Maintenance Form", icon: Wrench },
-  { key: "status", label: "Update Status", icon: RefreshCcw },
+const navItems = [
+  { to: "/technician-dashboard", label: "Dashboard", icon: LayoutDashboard, end: true },
+  { to: "/technician-dashboard/my-tasks", label: "My Tasks", icon: ClipboardList },
+  { to: "/technician-dashboard/history", label: "History", icon: History },
+  { to: "/technician-dashboard/profile", label: "Profile", icon: User },
 ];
 
-export default function Sidebar({ active, onNavigate }) {
+export default function Sidebar() {
   return (
-    <aside className="hidden md:flex flex-col w-64 shrink-0 border-r border-line bg-panel/60 h-screen sticky top-0">
-      <div className="px-5 py-5 border-b border-line">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-md bg-blueprint/15 border border-blueprint/40 flex items-center justify-center">
-            <Wrench size={16} className="text-blueprint" />
+    <aside className="flex h-full w-60 flex-col justify-between border-r border-slate-100 bg-white px-4 py-5">
+      <div>
+        <div className="flex items-center gap-2 px-2">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-600">
+            <Wrench size={14} className="text-white" />
           </div>
           <div>
-            <p className="font-display font-bold text-ink text-sm leading-none">MaintainIQ</p>
-            <p className="text-[11px] text-faint font-mono mt-0.5">Technician Console</p>
+            <div className="text-sm font-bold leading-none text-blue-700">MaintainIQ</div>
+            <div className="text-[11px] text-slate-400">Technician Portal</div>
           </div>
         </div>
+
+        <div className="mt-3 px-2">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-slate-600"
+          >
+            <ArrowLeft size={13} /> Back to home
+          </Link>
+        </div>
+
+        <nav className="mt-5 flex flex-col gap-1">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.end}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                    isActive
+                      ? "bg-blue-50 text-blue-700"
+                      : "text-slate-500 hover:bg-slate-50 hover:text-slate-700"
+                  }`
+                }
+              >
+                <Icon size={17} />
+                {item.label}
+              </NavLink>
+            );
+          })}
+        </nav>
       </div>
 
-      <nav className="flex-1 px-3 py-4 space-y-1">
-        {NAV_ITEMS.map(({ key, label, icon: Icon }) => {
-          const isActive = active === key;
-          return (
-            <button
-              key={key}
-              onClick={() => onNavigate(key)}
-              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors ${
-                isActive
-                  ? "bg-blueprint/12 text-blueprint border border-blueprint/30"
-                  : "text-dim border border-transparent hover:text-ink hover:bg-panel2"
-              }`}
-            >
-              <Icon size={17} strokeWidth={2} />
-              {label}
-            </button>
-          );
-        })}
-      </nav>
+      <div>
+        <div className="flex items-center justify-between rounded-lg border border-slate-100 px-3 py-2.5">
+          <span className="text-xs font-medium text-slate-500">Availability</span>
+          <AvailabilityToggle />
+        </div>
 
-      <div className="px-4 py-4 border-t border-line">
-        <div className="flex items-center gap-3 rounded-md bg-panel2 border border-line px-3 py-2.5">
-          <div className="w-8 h-8 rounded-full bg-panel flex items-center justify-center border border-line font-display text-xs text-ink">
-            {technician.name.split(" ").map((n) => n[0]).join("")}
+        <div className="mt-3 flex items-center gap-2.5 px-1">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-xs font-semibold text-white">
+            {technician.avatarInitials}
           </div>
           <div className="min-w-0">
-            <p className="text-xs font-semibold text-ink truncate">{technician.name}</p>
-            <p className="text-[11px] text-faint font-mono truncate">{technician.id}</p>
+            <div className="truncate text-sm font-semibold text-slate-800">{technician.name}</div>
+            <div className="truncate text-xs text-slate-400">{technician.role}</div>
           </div>
-          <span className="ml-auto inline-flex items-center gap-1 text-[10px] text-green font-mono">
-            <Wifi size={11} />
-          </span>
+        </div>
+
+        <div className="mt-3 flex flex-col gap-1">
+          <button className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-500 hover:bg-slate-50 hover:text-slate-700">
+            <Settings size={17} />
+            Settings
+          </button>
+          <button className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-rose-500 hover:bg-rose-50">
+            <LogOut size={17} />
+            Logout
+          </button>
         </div>
       </div>
     </aside>
+  );
+}
+
+function AvailabilityToggle() {
+  return (
+    <span className="relative inline-flex h-5 w-9 items-center rounded-full bg-emerald-500">
+      <span className="inline-block h-3.5 w-3.5 translate-x-4 rounded-full bg-white shadow" />
+    </span>
   );
 }

@@ -1,18 +1,23 @@
-const PRIORITY_STYLE = {
-  Low: "text-dim border-line bg-panel2",
-  Medium: "text-blueprint border-blueprint/40 bg-blueprint/10",
-  High: "text-amber border-amber/40 bg-amber/10",
-  Critical: "text-red border-red/50 bg-red/10",
+const priorityStyles = {
+  critical: "bg-rose-50 text-rose-600",
+  high: "bg-orange-50 text-orange-600",
+  medium: "bg-amber-50 text-amber-600",
+  low: "bg-slate-100 text-slate-500",
+};
+
+const priorityLabels = {
+  critical: "Critical",
+  high: "High priority",
+  medium: "Medium",
+  low: "Low priority",
 };
 
 export default function PriorityBadge({ priority }) {
   return (
     <span
-      className={`inline-flex items-center px-2 py-0.5 rounded border text-[11px] font-mono uppercase tracking-wider ${
-        PRIORITY_STYLE[priority] || PRIORITY_STYLE.Low
-      }`}
+      className={`inline-flex items-center rounded px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${priorityStyles[priority]}`}
     >
-      {priority}
+      {priorityLabels[priority]}
     </span>
   );
 }
