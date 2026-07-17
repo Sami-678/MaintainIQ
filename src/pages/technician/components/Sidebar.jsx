@@ -1,6 +1,7 @@
 import { NavLink, Link } from "react-router-dom";
 import { LayoutDashboard, ClipboardList, History, User, Settings, LogOut, Wrench, ArrowLeft } from "lucide-react";
-import { technician } from "../data/tasks";
+import { technician as demoTechnician } from "../data/tasks";
+import { useAuth } from "../../../context/AuthContext.jsx";
 
 const navItems = [
   { to: "/technician-dashboard", label: "Dashboard", icon: LayoutDashboard, end: true },
@@ -10,6 +11,11 @@ const navItems = [
 ];
 
 export default function Sidebar() {
+  const { user, logout } = useAuth();
+  const name = user?.name || demoTechnician.name;
+  const role = user ? "Technician" : demoTechnician.role;
+  const avatarInitials = user?.avatarInitials || demoTechnician.avatarInitials;
+
   return (
     <aside className="flex h-full w-60 flex-col justify-between border-r border-slate-100 bg-white px-4 py-5">
       <div>
@@ -64,11 +70,11 @@ export default function Sidebar() {
 
         <div className="mt-3 flex items-center gap-2.5 px-1">
           <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-xs font-semibold text-white">
-            {technician.avatarInitials}
+            {avatarInitials}
           </div>
           <div className="min-w-0">
-            <div className="truncate text-sm font-semibold text-slate-800">{technician.name}</div>
-            <div className="truncate text-xs text-slate-400">{technician.role}</div>
+            <div className="truncate text-sm font-semibold text-slate-800">{name}</div>
+            <div className="truncate text-xs text-slate-400">{role}</div>
           </div>
         </div>
 
@@ -77,10 +83,14 @@ export default function Sidebar() {
             <Settings size={17} />
             Settings
           </button>
-          <button className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-rose-500 hover:bg-rose-50">
+          <Link
+            to="/"
+            onClick={logout}
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-rose-500 hover:bg-rose-50"
+          >
             <LogOut size={17} />
             Logout
-          </button>
+          </Link>
         </div>
       </div>
     </aside>

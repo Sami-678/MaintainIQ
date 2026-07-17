@@ -2,6 +2,7 @@ import { NavLink, Link } from "react-router-dom";
 import {
   LayoutGrid, ClipboardList, QrCode, AlertTriangle, BarChart3, History, Search, Wrench, LogOut, ArrowLeft, X,
 } from "lucide-react";
+import { useAuth } from "../../../context/AuthContext.jsx";
 
 const navItems = [
   { to: "", label: "Admin Dashboard", icon: LayoutGrid, end: true },
@@ -14,6 +15,10 @@ const navItems = [
 ];
 
 export default function Sidebar({ open, onClose }) {
+  const { user, logout } = useAuth();
+  const name = user?.name || "Alex Rivera";
+  const avatarInitials = user?.avatarInitials || "AR";
+
   return (
     <>
       {open && (
@@ -32,7 +37,7 @@ export default function Sidebar({ open, onClose }) {
               </div>
               <div>
                 <div className="text-sm font-bold leading-none text-slate-800">MaintainIQ</div>
-                <div className="mt-0.5 text-xs tracking-wide text-slate-400">USER MANAGEMENT</div>
+                <div className="mt-0.5 text-xs tracking-wide text-slate-400">ADMIN PANEL</div>
               </div>
             </div>
             <button onClick={onClose} aria-label="Close menu" className="sidebar-close-btn text-slate-400 hover:text-slate-600">
@@ -75,16 +80,16 @@ export default function Sidebar({ open, onClose }) {
         <div className="flex items-center justify-between border-t border-slate-100 px-4 py-4">
           <div className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-200 text-xs font-semibold text-slate-600">
-              AR
+              {avatarInitials}
             </div>
             <div>
-              <div className="text-sm font-semibold text-slate-800">Alex Rivera</div>
+              <div className="text-sm font-semibold text-slate-800">{name}</div>
               <div className="text-xs text-slate-400">Admin</div>
             </div>
           </div>
-          <button aria-label="Logout" className="text-slate-400 hover:text-slate-600">
+          <Link to="/" onClick={logout} aria-label="Logout" className="text-slate-400 hover:text-slate-600">
             <LogOut size={16} />
-          </button>
+          </Link>
         </div>
       </aside>
     </>

@@ -1,16 +1,18 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LandingPage from "./pages/landing/LandingPage";
-import TechnicianDashboardApp from "./pages/technician/TechnicianDashboardApp";
-import UserDashboardApp from "./pages/userdashboard/UserDashboardApp";
+import { Routes, Route } from 'react-router-dom'
+import Home from './pages/Home.jsx'
+import Login from './pages/Login.jsx'
+import Signup from './pages/Signup.jsx'
+import TechnicianDashboardApp from './pages/technician/TechnicianDashboardApp.jsx'
+import UserDashboardApp from './pages/userdashboard/UserDashboardApp.jsx'
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/technician-dashboard/*" element={<TechnicianDashboardApp />} />
-        <Route path="/user-dashboard/*" element={<UserDashboardApp />} />
-      </Routes>
-    </BrowserRouter>
-  );
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/technician-dashboard/*" element={<TechnicianDashboardApp />} />
+      <Route path="/user-dashboard/*" element={<UserDashboardApp />} />
+    </Routes>
+  )
 }

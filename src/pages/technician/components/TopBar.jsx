@@ -1,12 +1,18 @@
 import { Search, Bell, HelpCircle } from "lucide-react";
-import { technician } from "../data/tasks";
+import { technician as demoTechnician } from "../data/tasks";
+import { useAuth } from "../../../context/AuthContext.jsx";
 
 export default function TopBar({ title }) {
+  const { user } = useAuth();
+  const name = user?.name || demoTechnician.name;
+  const avatarInitials = user?.avatarInitials || demoTechnician.avatarInitials;
+  const firstName = name.split(" ")[0];
+
   return (
     <div className="flex items-center justify-between border-b border-slate-100 bg-white px-6 py-4">
       <div>
         <div className="text-lg font-semibold text-slate-800">
-          Hello, {technician.name.split(" ")[0]} {technician.name.split(" ")[1]}
+          Hello, {firstName}
         </div>
         {title && <div className="text-xs text-slate-400">{title}</div>}
       </div>
@@ -28,7 +34,7 @@ export default function TopBar({ title }) {
           <HelpCircle size={18} />
         </button>
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 text-xs font-semibold text-slate-600">
-          {technician.avatarInitials}
+          {avatarInitials}
         </div>
       </div>
     </div>
